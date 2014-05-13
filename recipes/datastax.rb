@@ -124,6 +124,11 @@ when "rhel"
 
 end
 
+link '/etc/init.d/cassandra' do
+  to '/etc/init.d/dse'
+  only_if { ::File.exists?('/etc/init.d/dse') && !::File.exists?('/etc/init.d/cassandra') }
+end
+
 %w(cassandra.yaml cassandra-env.sh).each do |f|
   template File.join(node.cassandra.conf_dir, f) do
     cookbook node.cassandra.templates_cookbook
