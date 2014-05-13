@@ -145,4 +145,5 @@ service "cassandra" do
   service_name node.cassandra.service_name
   action [:enable, :start]
   retries 2
+  retry_delay 60
 end
