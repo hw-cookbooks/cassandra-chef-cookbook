@@ -136,7 +136,9 @@ end
     owner node.cassandra.user
     group node.cassandra.user
     mode  0644
-    notifies :restart, "service[cassandra]", :delayed
+    if ::File.exists?("#{node.cassandra.conf_dir}/first_run_complete.json")
+      notifies :restart, "service[cassandra]", :delayed
+    end
   end
 end
 
@@ -144,4 +146,9 @@ service "cassandra" do
   supports :restart => true, :status => true
   service_name node.cassandra.service_name
   action [:enable, :start]
+  only_if { ::File.exists?("#{node.cassandra.conf_dir}/first_run_complete.json") }
+end
+
+file "#{node.cassandra.conf_dir}/first_run_complete.json" do
+  content "{}"
 end
