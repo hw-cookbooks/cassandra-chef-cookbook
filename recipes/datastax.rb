@@ -51,7 +51,7 @@ when "debian"
   # one installed. MK.
   package "python-cql" do
     action :install
-    only_if { repo_uri.path == '/community' }
+    only_if { node[:cassandra][:datastax_repo_uri] =~ /\/community/ }
   end
 
   # This is necessary because apt gets very confused by the fact that the
