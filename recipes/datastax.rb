@@ -58,13 +58,13 @@ when "debian"
   # latest package available for cassandra is 2.x while you're trying to
   # install dsc12 which requests 1.2.x.
   if node.platform_family == "debian" then
-    package "cassandra" do
+    package node.cassandra.package_name do
       action :install
       version node.cassandra.version
     end
   end
 when "rhel"
-  yum_package "#{node.cassandra.package_name}" do
+  yum_package node.cassandra.package_name do
     version "#{node.cassandra.version}-#{node.cassandra.release}"
     allow_downgrade
   end
