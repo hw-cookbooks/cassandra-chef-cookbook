@@ -60,7 +60,7 @@ when "debian"
   if node.platform_family == "debian" then
     package node.cassandra.package_name do
       action :install
-      version node.cassandra.version
+      version "#{node.cassandra.version}-#{node.cassandra.release}"
     end
   end
 when "rhel"
