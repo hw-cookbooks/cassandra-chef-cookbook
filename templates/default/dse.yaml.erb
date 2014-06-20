@@ -1,0 +1,20 @@
+delegated_snitch: <%= node[:cassandra][:delegated_snitch] %>
+
+kerberos_options:
+    keytab: resources/dse/conf/dse.keytab
+    service_principal: dse/_HOST@REALM
+    http_principal: HTTP/_HOST@REALM
+    qop: auth
+
+ttl_index_rebuild_options:
+    # by default, schedule a check every 300 seconds
+    fixed_rate_period: 300
+    # the first check is delayed to speed up startup time
+    initial_delay: 20
+    # documents subject to TTL are checked in batches: this configures the max number of docs
+    # checked per batch
+    max_docs_per_batch: 200
+
+shard_transport_options:
+    type: http
+    netty_server_port: 8984

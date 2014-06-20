@@ -69,6 +69,7 @@ default[:cassandra] = {
   :cross_node_timeout                   => false,
   :streaming_socket_timeout_in_ms       => 0, #never timeout streams
   :snitch                               => 'SimpleSnitch',  # endpoint_snitch config
+  :delegated_snitch                     => 'com.datastax.bdp.snitch.DseSimpleSnitch',
   :dynamic_snitch_update_interval_in_ms => 100,
   :dynamic_snitch_reset_interval_in_ms  => 600000,
   :dynamic_snitch_badness_threshold     => 0.1,

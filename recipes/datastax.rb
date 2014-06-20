@@ -88,6 +88,15 @@ end
   end
 end
 
+template '/etc/dse/dse.yaml' do
+  cookbook node.cassandra.templates_cookbook
+  source 'dse.yaml.erb'
+  only_if { node[:cassandra][:datastax_repo_uri] =~ /\/enterprise/ }
+  if ::File.exists?("#{node.cassandra.conf_dir}/first_run_complete.json")
+    notifies :restart, "service[cassandra]", :delayed
+  end
+end
+
 service "cassandra" do
   supports :restart => true, :status => true
   service_name node.cassandra.service_name
