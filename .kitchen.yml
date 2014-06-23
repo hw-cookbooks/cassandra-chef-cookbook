@@ -32,8 +32,14 @@ suites:
   - name: dse
     run_list:
       - recipe[cassandra::default]
+  - name: opscenter
+    run_list:
+      - recipe[cassandra::opscenter_server]
     attributes:
       cassandra:
+        opscenter:
+          server:
+            package_name: "opscenter"
         dse:
           credentials:
             databag: false
