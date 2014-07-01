@@ -32,7 +32,7 @@ if dse_credentials
   repo_config.merge!({ :userinfo => [repo_user, repo_pass].join(':') })
 end
 
-node.default[:cassandra][:datastax_repo_uri] = URI::HTTPS.build(repo_config).to_s
+node.set[:cassandra][:datastax_repo_uri] = URI::HTTPS.build(repo_config).to_s
 
 case node.platform_family
 when "debian"
