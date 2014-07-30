@@ -24,7 +24,11 @@ repo_host = value_for_platform(
 # the availability of enterprise edition credentials
 repo_path = dse_credentials ? '/enterprise' : '/community'
 
-repo_config = { :host => repo_host, :path => repo_path }
+repo_config = {
+  :host => repo_host,
+  :path => repo_path,
+  :scheme => node[:cassandra][:datastax_repo_scheme]
+}
 
 if dse_credentials
   repo_user = dse_credentials['username']
@@ -32,17 +36,22 @@ if dse_credentials
   repo_config.merge!({ :userinfo => [repo_user, repo_pass].join(':') })
 end
 
-node.set[:cassandra][:datastax_repo_uri] = URI::HTTPS.build(repo_config).to_s
+node.set[:cassandra][:datastax_repo_uri] = case repo_config[:scheme]
+                                           when 'http'
+                                             URI::HTTP.build(repo_config).to_s
+                                           when 'https'
+                                             URI::HTTPS.build(repo_config).to_s
+                                           end
 
 case node.platform_family
 when "debian"
-  package "apt-transport-https"
+  package "apt-transport-https" if repo_config[:scheme] == 'https'
 
   apt_repository "datastax" do
     uri          node[:cassandra][:datastax_repo_uri]
     distribution "stable"
     components   ["main"]
-    key          "http://debian.datastax.com/debian/repo_key"
+    key          "#{node[:cassandra][:datastax_repo_scheme]}://debian.datastax.com/debian/repo_key"
     action       :add
   end
 

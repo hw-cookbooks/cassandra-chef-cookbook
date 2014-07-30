@@ -100,6 +100,10 @@ default[:cassandra][:tarball] = {
   :md5 => "1894c5103d12a2be14a2c44bfa2363cc"
 }
 
+default[:cassandra][:datastax_repo_uri] = nil
+# scheme may be http or https
+default[:cassandra][:datastax_repo_scheme] = 'http'
+
 default[:cassandra][:opscenter][:server] = {
   :package_name => "opscenter-free",
   :port => "8888",
