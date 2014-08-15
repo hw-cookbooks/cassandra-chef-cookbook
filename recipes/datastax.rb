@@ -77,6 +77,18 @@ end
 
 first_run_complete = ::File.join(node.cassandra.conf_dir, "first_run_complete.json")
 
+log "whitelisted_cassandra_attribute_notification" do
+  message "A white-listed Cassandra attribute was updated, the service may not be restarted"
+  level :warn
+  action :nothing
+end
+
+log "cassandra_configuration_attr_notification" do
+  message "A Cassandra attribute was updated, the service will be restarted."
+  level :warn
+  action :nothing
+end
+
 template ::File.join(node.cassandra.conf_dir, "cassandra.yaml") do
     cookbook node.cassandra.templates_cookbook
     source "cassandra.yaml.erb"
@@ -93,6 +105,7 @@ template ::File.join(node.cassandra.conf_dir, "cassandra-no-restart.yaml") do
     mode 00644
     if ::File.exists?(first_run_complete)
       notifies :nothing, "service[cassandra]", :delayed
+      notifies :write, "log[whitelisted_cassandra_attribute_notification]", :immediately
     end
 end
 
@@ -104,6 +117,7 @@ template ::File.join(node.cassandra.conf_dir, "cassandra-does-restart.yaml") do
     mode 00644
     if ::File.exists?(first_run_complete)
       notifies :restart, "service[cassandra]", :delayed
+      notifies :write, "log[cassandra_configuration_attr_notification]", :immediately
     end
 end
 
