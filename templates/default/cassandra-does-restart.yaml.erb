@@ -1,0 +1,113 @@
+# Cassandra configuration settings that RESTART the cassandra service
+
+<% if node[:cassandra][:vnodes] %>
+num_tokens: <%=node[:cassandra][:vnodes]%>
+<% end %>
+
+<% if node[:cassandra][:vnodes] %>
+initial_token:
+<% else %>
+initial_token: <%= node[:cassandra][:initial_token] %>
+<% end %>
+
+hinted_handoff_enabled: <%= cassandra_bool_config(node[:cassandra][:hinted_handoff_enabled]) %>
+
+max_hint_window_in_ms: <%= node[:cassandra][:max_hint_window_in_ms] %>
+
+hinted_handoff_throttle_in_kb: <%= node[:cassandra][:hinted_handoff_throttle_in_kb] %>
+
+max_hints_delivery_threads: <%= node[:cassandra][:max_hints_delivery_threads] %>
+
+permissions_validity_in_ms: <%= node[:cassandra][:permissions_validity_in_ms] %>
+
+commitlog_directory: <%= File.join(node.cassandra.commitlog_dir, 'commitlog') %>
+
+disk_failure_policy: <%= node[:cassandra][:disk_failure_policy] %>
+
+key_cache_size_in_mb: <%= node[:cassandra][:key_cache_size_in_mb]  %>
+
+key_cache_save_period: <%= node[:cassandra][:key_cache_save_period] %>
+
+row_cache_size_in_mb: <%= node[:cassandra][:row_cache_size_in_mb] %>
+
+row_cache_save_period: <%= node[:cassandra][:row_cache_save_period] %>
+
+<% if node.cassandra.row_cache_provider && node.cassandra.row_cache_provider != "SerializingCacheProvider" %>
+row_cache_provider: <%= node[:cassandra][:row_cache_provider] %>
+<% end %>
+
+commitlog_sync: <%= node[:cassandra][:commitlog_sync] %>
+<% if "periodic" == node.cassandra.commitlog_sync %>
+commitlog_sync_period_in_ms: <%= node[:cassandra][:commitlog_sync_period_in_ms] %>
+<% else %>
+commitlog_sync_batch_window_in_ms: <%= node[:cassandra][:commitlog_sync_batch_window_in_ms] %>
+<% end %>
+
+commitlog_segment_size_in_mb: <%= node[:cassandra][:commitlog_segment_size_in_mb] %>
+
+concurrent_reads: <%= node[:cassandra][:concurrent_reads] %>
+concurrent_writes: <%= node[:cassandra][:concurrent_writes] %>
+
+memtable_flush_queue_size: <%= node[:cassandra][:memtable_flush_queue_size] %>
+
+trickle_fsync: <%= cassandra_bool_config(node[:cassandra][:trickle_fsync]) %>
+trickle_fsync_interval_in_kb: <%= node[:cassandra][:trickle_fsync_interval_in_kb] %>
+
+listen_address: <%= node[:cassandra][:listen_address] %>
+
+broadcast_address: <%= node[:cassandra][:broadcast_address] %>
+
+start_native_transport: <%= cassandra_bool_config(node[:cassandra][:start_native_transport]) %>
+native_transport_port: <%= node[:cassandra][:native_transport_port] %>
+
+start_rpc: <%= cassandra_bool_config(node[:cassandra][:start_rpc]) %>
+
+rpc_address: <%= node[:cassandra][:rpc_address] %>
+
+rpc_port: <%= node[:cassandra][:rpc_port] %>
+
+rpc_keepalive: <%= cassandra_bool_config(node[:cassandra][:rpc_keepalive]) %>
+
+rpc_server_type: <%= node[:cassandra][:rpc_server_type] %>
+
+thrift_framed_transport_size_in_mb: <%= node[:cassandra][:thrift_framed_transport_size_in_mb] %>
+
+thrift_max_message_length_in_mb: <%= node[:cassandra][:thrift_max_message_length_in_mb] %>
+
+column_index_size_in_kb: <%= node[:cassandra][:column_index_size_in_kb] %>
+
+in_memory_compaction_limit_in_mb: <%= node[:cassandra][:in_memory_compaction_limit_in_mb] %>
+
+multithreaded_compaction: <%= cassandra_bool_config(node[:cassandra][:multithreaded_compaction]) %>
+
+compaction_throughput_mb_per_sec: <%= node[:cassandra][:compaction_throughput_mb_per_sec] %>
+
+compaction_preheat_key_cache: <%= cassandra_bool_config(node[:cassandra][:compaction_preheat_key_cache]) %>
+
+read_request_timeout_in_ms: <%= node[:cassandra][:read_request_timeout_in_ms] %>
+
+range_request_timeout_in_ms: <%= node[:cassandra][:range_request_timeout_in_ms] %>
+
+write_request_timeout_in_ms: <%= node[:cassandra][:write_request_timeout_in_ms] %>
+
+truncate_request_timeout_in_ms: <%= node[:cassandra][:truncate_request_timeout_in_ms] %>
+
+request_timeout_in_ms: <%= node[:cassandra][:request_timeout_in_ms] %>
+
+cross_node_timeout: <%= cassandra_bool_config(node[:cassandra][:cross_node_timeout]) %>
+
+streaming_socket_timeout_in_ms: <%= node[:cassandra][:streaming_socket_timeout_in_ms] %>
+
+phi_convict_threshold: <%= node[:cassandra][:phi_convict_threshold] %>
+
+dynamic_snitch_update_interval_in_ms: <%= node[:cassandra][:dynamic_snitch_update_interval_in_ms] %>
+
+dynamic_snitch_reset_interval_in_ms: <%= node[:cassandra][:dynamic_snitch_reset_interval_in_ms] %>
+
+dynamic_snitch_badness_threshold: <%= node[:cassandra][:dynamic_snitch_badness_threshold] %>
+
+index_interval: <%= node[:cassandra][:index_interval] %>
+
+<% if node[:cassandra][:auto_bootstrap] == false %>
+auto_bootstrap: false
+<% end %>
