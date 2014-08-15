@@ -1,0 +1,33 @@
+# Cassandra configuration settings that do NOT cause a restart of cassandra
+
+cluster_name: '<%= node[:cassandra][:cluster_name] %>'
+
+authenticator: <%= node[:cassandra][:authenticator] %>
+
+authorizer: <%= node[:cassandra][:authorizer] %>
+
+partitioner: <%= node[:cassandra][:partitioner] %>
+
+data_file_directories:
+    - <%= File.join(node.cassandra.data_root_dir, 'data') %>
+
+saved_caches_directory: <%= File.join(node.cassandra.data_root_dir, 'saved_caches') %>
+
+seed_provider:
+    - class_name: org.apache.cassandra.locator.SimpleSeedProvider
+      parameters:
+          - seeds: "<%= if node[:cassandra][:seeds].kind_of?(Array) then node[:cassandra][:seeds].join(",") else node[:cassandra][:seeds] end %>"
+
+storage_port: <%= node[:cassandra][:storage_port] %>
+
+ssl_storage_port: <%= node[:cassandra][:ssl_storage_port] %>
+
+incremental_backups: <%= node[:cassandra][:incremental_backups] %>
+
+snapshot_before_compaction: <%= cassandra_bool_config(node[:cassandra][:snapshot_before_compaction]) %>
+
+auto_snapshot: <%= cassandra_bool_config(node[:cassandra][:auto_snapshot]) %>
+
+endpoint_snitch: <%= node[:cassandra][:snitch] %>
+
+request_scheduler: <%= node[:cassandra][:request_scheduler] %>
