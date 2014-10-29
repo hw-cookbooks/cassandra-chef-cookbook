@@ -21,6 +21,7 @@ agent_dir = "#{node[:cassandra][:opscenter][:agent][:install_dir]}/#{node[:cassa
 
 template "#{agent_dir}/conf/address.yaml" do
   mode 0644
+  cookbook node[:cassandra][:templates_cookbook]
   source "opscenter-agent.conf.erb"
   variables({
     :server_ip => server_ip

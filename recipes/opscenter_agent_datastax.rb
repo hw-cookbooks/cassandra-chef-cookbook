@@ -23,6 +23,7 @@ end
 
 template "/var/lib/datastax-agent/conf/address.yaml" do
   mode 0644
+  cookbook node[:cassandra][:templates_cookbook]
   source "opscenter-agent.conf.erb"
   variables({
     :server_ip => server_ip
