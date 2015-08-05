@@ -25,5 +25,7 @@ end
 
 link "#{node.cassandra.lib_dir}/jna.jar" do
   to          "/usr/share/java/jna.jar"
-  notifies    :restart, "service[cassandra]"
+  if ::File.exists?(::File.join(node.cassandra.conf_dir, "first_run_complete.json"))
+    notifies :restart, "service[cassandra]", :delayed
+  end
 end
